@@ -32,24 +32,18 @@ export const Navbar = async () => {
               <SlashIcon size={16} />
             </div>
             <div className="text-sm dark:text-zinc-300 truncate w-28 md:w-fit">
-              Next.js Gemini Chatbot
+              My Magic Calendar
             </div>
 
           </div>
         </div>
 
-        <div className="flex items-center justify-center">
-          <button
-            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg
-               px-6 py-3 text-base hover:scale-105 hover:brightness-110 transition-all duration-200">
-            Start Chat
-          </button>
-        </div>
-
-
         <div className="flex items-center gap-2">
           <Button className="py-1.5 px-2 h-fit font-normal" variant="ghost" asChild>
-            <Link href="/study-material">Study Material</Link>
+            <Link href="/" className={`${"bg-primary/90 text-white"} rounded-lg`}>Home</Link>
+          </Button>
+          <Button className="py-1.5 px-2 h-fit font-normal" variant="ghost" asChild>
+            <Link href="/study-material" className={`${"bg-primary/90 text-white"} rounded-lg`}>Study Material</Link>
           </Button>
           
           {session ? (

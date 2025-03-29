@@ -6,10 +6,11 @@ import { ThemeProvider } from "@/components/custom/theme-provider";
 
 import "./globals.css";
 
+// TODO: change metadata
 export const metadata: Metadata = {
   metadataBase: new URL("https://gemini.vercel.ai"),
-  title: "Next.js Gemini Chatbot",
-  description: "Next.js chatbot template using the AI SDK and Gemini.",
+  title: "My Magic Calendar",
+  description: "Canvas LMS integration that provides smart suggestions and advice.",
 };
 
 export default async function RootLayout({
