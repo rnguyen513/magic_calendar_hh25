@@ -21,6 +21,7 @@ import SchedulePage from "../schedule/page";
 import { SchedulerProvider } from '@/providers/schedular-provider';
 import { CalendarLoader } from '@/components/schedule/calendar-loader';
 import SchedulerView from '@/components/schedule/_components/view/schedular-view';
+import TaskList from "@/components/custom/task-list";
 
 export default function Page() {
 
@@ -42,12 +43,10 @@ export default function Page() {
                 <CalendarLoader/>
 
                 {/* Task List Section */}
-                <div className="w-1/3 p-6 border-r border-gray-300 overflow-hidden">
-                    <h2 className="text-lg font-semibold mb-4">Task List</h2>
-                </div>
+                <TaskList/>
 
                 {/* Calendar Section */}
-                <div className="w-2/3 px-6 overflow-hidden">
+                <div className="w-2/3 p-6 overflow-hidden">
                     <SchedulerView/>
                 </div>
 

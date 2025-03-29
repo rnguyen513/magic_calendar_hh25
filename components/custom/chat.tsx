@@ -10,6 +10,8 @@ import { useScrollToBottom } from "@/components/custom/use-scroll-to-bottom";
 import { MultimodalInput } from "./multimodal-input";
 import { Overview } from "./overview";
 
+import { useScheduler } from "@/providers/schedular-provider";
+
 export function Chat({
   id,
   initialMessages,
@@ -17,6 +19,7 @@ export function Chat({
   id: string;
   initialMessages: Array<Message>;
 }) {
+    const { events } = useScheduler();
   const { messages, handleSubmit, input, setInput, append, isLoading, stop } =
     useChat({
       id,

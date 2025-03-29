@@ -15,78 +15,67 @@ import {
 } from "../ui/dropdown-menu";
 
 export const Navbar = async () => {
-    let session = await auth();
-  
-    return (
-      <div className="bg-background w-full py-2 px-3 justify-between flex flex-row items-center z-30 shadow-md">
-        <div className="flex flex-row gap-3 items-center">
-          <History user={session?.user} />
-          <div className="flex flex-row gap-2 items-center">
-            <Image
-              src="/images/gemini-logo.png"
-              height={20}
-              width={20}
-              alt="gemini logo"
-            />
-            <div className="text-zinc-500">
-              <SlashIcon size={16} />
-            </div>
-            <div className="text-sm dark:text-zinc-300 truncate w-28 md:w-fit">
-              My Magic Calendar
-            </div>
+  let session = await auth();
 
-          </div>
-        </div>
-
+  return (
+    <nav className="bg-white dark:bg-gray-900 w-full py-3 px-6 flex items-center justify-between shadow-sm border-b border-gray-200 dark:border-gray-800">
+      {/* Left Side: Logo & History */}
+      <div className="flex items-center gap-4">
+        <History user={session?.user} />
         <div className="flex items-center gap-2">
-          <Button className="py-1.5 px-2 h-fit font-normal" variant="ghost" asChild>
-            <Link href="/" className={`${"bg-primary/90 text-white"} rounded-lg`}>Home</Link>
-          </Button>
-          <Button className="py-1.5 px-2 h-fit font-normal" variant="ghost" asChild>
-            <Link href="/study-material" className={`${"bg-primary/90 text-white"} rounded-lg`}>Study Material</Link>
-          </Button>
-          
-          {session ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  className="py-1.5 px-2 h-fit font-normal"
-                  variant="secondary"
-                >
-                  {session.user?.email}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <ThemeToggle />
-                </DropdownMenuItem>
-                <DropdownMenuItem className="p-1 z-50">
-                  <form
-                    className="w-full"
-                    action={async () => {
-                      "use server";
-
-                      await signOut({
-                        redirectTo: "/",
-                      });
-                    }}
-                  >
-                    <button
-                      type="submit"
-                      className="w-full text-left px-1 py-0.5 text-red-500"
-                    >
-                      Sign out
-                    </button>
-                  </form>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button className="py-1.5 px-2 h-fit font-normal text-white" asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-          )}
+          <Image src="/images/gemini-logo.png" height={24} width={24} alt="Gemini logo" />
+          <SlashIcon size={18}/>
+          <span className="text-sm font-medium dark:text-gray-300 truncate w-32 md:w-auto">
+            My Magic Calendar
+          </span>
         </div>
       </div>
-    );
+
+      {/* Right Side: Navigation & User Menu */}
+      <div className="flex items-center gap-3">
+        <NavLink href="/" label="Home" />
+        <NavLink href="/study-material" label="Study Material" />
+        <NavLink href="/chat" label="AI Chats"/>
+
+        {session ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" className="px-3 py-1.5 text-sm">
+                {session.user?.email}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                <ThemeToggle />
+              </DropdownMenuItem>
+              <DropdownMenuItem className="p-1">
+                <form
+                  className="w-full"
+                  action={async () => {
+                    "use server";
+                    await signOut({ redirectTo: "/" });
+                  }}
+                >
+                  <button type="submit" className="w-full text-left px-2 py-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900 rounded-md">
+                    Sign out
+                  </button>
+                </form>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button asChild className="px-3 py-1.5 text-sm font-medium bg-blue-600 text-white hover:bg-blue-700">
+            <Link href="/login">Login</Link>
+          </Button>
+        )}
+      </div>
+    </nav>
+  );
 };
+
+// Reusable navigation link component for better consistency
+const NavLink = ({ href, label }: { href: string; label: string }) => (
+  <Link href={href} className="px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition">
+    {label}
+  </Link>
+);

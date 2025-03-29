@@ -7,6 +7,8 @@ import { getChatById } from "@/db/queries";
 import { Chat } from "@/db/schema";
 import { convertToUIMessages } from "@/lib/utils";
 
+import { SchedulerProvider } from "@/providers/schedular-provider";
+
 export default async function Page({ params }: { params: any }) {
   const { id } = params;
   const chatFromDb = await getChatById({ id });
@@ -31,5 +33,9 @@ export default async function Page({ params }: { params: any }) {
     return notFound();
   }
 
-  return <PreviewChat id={chat.id} initialMessages={chat.messages} />;
+  return(
+    <SchedulerProvider>
+        <PreviewChat id={chat.id} initialMessages={chat.messages} />
+    </SchedulerProvider>
+    )
 }
