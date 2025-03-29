@@ -40,7 +40,7 @@ export function CalendarLoader() {
           });
         });
         
-        console.log("Successfully added Canvas assignments to calendar");
+        console.log("Successfully added Canvas assignments to context");
         setLoaded(true);
       } catch (error) {
         console.error("Error loading Canvas assignments:", error);
@@ -52,4 +52,4 @@ export function CalendarLoader() {
 
   // This component doesn't render anything
   return null;
-} 
+}

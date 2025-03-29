@@ -16,8 +16,8 @@ export default function SchedulePage() {
       
       {/* Wrap the calendar view with the SchedulerProvider */}
       <SchedulerProvider>
-        <CalendarLoader />
-        <SchedulerView />
+        <CalendarLoader/>
+        <SchedulerView/>
       </SchedulerProvider>
     </div>
   );

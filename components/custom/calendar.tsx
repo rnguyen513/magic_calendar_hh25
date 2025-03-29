@@ -10,7 +10,7 @@ const Calendar = ({events}:CalendarProps) => {
     return(
         <div className="p-5">
             <SchedulerProvider initialState={events} weekStartsOn="monday">
-                <SchedulerWrapper 
+                <SchedulerWrapper
                 stopDayEventSummary={true}
                 classNames={{
                     tabs: {
