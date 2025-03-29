@@ -48,48 +48,51 @@ export async function canvasGET<T>(endpoint: string): Promise<T> {
 // Function to fetch all assignments from Canvas
 export async function fetchCanvasAssignments(): Promise<CanvasAssignmentBasic[]> {
   try {
-    // getting courses enrolled in 
+
     const courses = await canvasGET<CanvasCourse[]>("/courses?enrollment_state=active&per_page=50");
     console.log("Fetched Canvas courses:", courses.length);
-    
-    // create array that will be filled with course assignment is in and due date
-    const assignmentsDue: CanvasAssignmentBasic[] = []; 
 
-    for (const course of courses) {
-      const assignments = await canvasGET<CanvasAssignment[]>(`/courses/${course.id}/assignments?per_page=100`);
-      console.log(`Fetched ${assignments.length} assignments for course: ${course.name}`);
+    // Parallel fetch for all assignments
+    // promise all calls to fetch for all this data all at the same time instead of one by one 
+    const allAssignments = await Promise.all( 
 
-      const upcoming = assignments
-        // filter out assignments without due dates
-        .filter(a => a.due_at !== null)
-        .map(a => ({
-          id: a.id,
-          name: a.name,
-          course: course.name,
-          created_at: a.created_at!,
-          due_at: a.due_at!,
-          points_possible: a.points_possible || 0,
-          description: a.description || ''
-        }));
 
-      assignmentsDue.push(...upcoming);
-    }
+      courses.map(async (course) => {
+        // get assignments for each course 
+        const assignments = await canvasGET<CanvasAssignment[]>(`/courses/${course.id}/assignments?per_page=100`);
+        // record all assignments 
+        console.log(`Fetched ${assignments.length} assignments for course: ${course.name}`);
 
-    console.log(`Total assignments fetched: ${assignmentsDue.length}`);
-    return assignmentsDue;
+        // filter what we want from the assignments 
+        return assignments
+          .filter((a) => a.due_at !== null)
+          .map((a) => ({
+            id: a.id,
+            name: a.name,
+            course: course.name,
+            created_at: a.created_at!,
+            due_at: a.due_at!,
+            points_possible: a.points_possible || 0,
+            description: a.description || "",
+          }));
+      })
+    );
+    // instead of multiple instead of assignments have them one into short 
+    const flattened = allAssignments.flat();
+    console.log(`Total assignments fetched: ${flattened.length}`);
+    return flattened;
   } catch (err: any) {
     console.error("Failed to fetch Canvas assignments:", err.message);
     throw err;
   }
 }
 
-// For backward compatibility and console logging
 (async () => {
   try {
+    // assignmentsDue will contain all the data we fetched
     const assignmentsDue = await fetchCanvasAssignments();
-    // make into JSON string
-    const jsonInfo = JSON.stringify(assignmentsDue, null, 2); // add a lil spacing
-    // print the json 
+    // stringify so we can return in json 
+    const jsonInfo = JSON.stringify(assignmentsDue, null, 2);
     console.log(jsonInfo);
   } catch (err: any) {
     console.error("Failed to fetch:", err.message);
