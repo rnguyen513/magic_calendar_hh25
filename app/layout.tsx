@@ -13,24 +13,22 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body className="antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Toaster position="top-center" />
-          <Navbar />
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+    children,
+  }: Readonly<{ children: React.ReactNode }>) {
+    return (
+      <html lang="en">
+        <body className="antialiased flex flex-col min-h-screen">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Toaster position="top-center" />
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+          </ThemeProvider>
+        </body>
+      </html>
+    );
 }
