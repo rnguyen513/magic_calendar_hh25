@@ -17,6 +17,8 @@ import {
 import { Chat } from "@/components/custom/chat";
 import { generateUUID } from "@/lib/utils";
 
+import SchedulePage from "../schedule/page";
+
 export default function Page() {
 
     const [openChat, setOpenChat] = useState(false)
@@ -40,7 +42,7 @@ export default function Page() {
 
             {/* Calendar Section */}
             <div className="w-2/3 px-6 overflow-hidden">
-                <Calendar />
+                <SchedulePage/>
             </div>
 
             {/*chat overlay*/}
