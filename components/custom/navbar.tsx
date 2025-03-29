@@ -15,11 +15,10 @@ import {
 } from "../ui/dropdown-menu";
 
 export const Navbar = async () => {
-  let session = await auth();
-
-  return (
-    <>
-      <div className="bg-background absolute top-0 left-0 w-dvw py-2 px-3 justify-between flex flex-row items-center z-30">
+    let session = await auth();
+  
+    return (
+      <div className="bg-background w-full py-2 px-3 justify-between flex flex-row items-center z-30 shadow-md">
         <div className="flex flex-row gap-3 items-center">
           <History user={session?.user} />
           <div className="flex flex-row gap-2 items-center">
@@ -37,7 +36,7 @@ export const Navbar = async () => {
             </div>
           </div>
         </div>
-
+  
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -57,7 +56,7 @@ export const Navbar = async () => {
                   className="w-full"
                   action={async () => {
                     "use server";
-
+  
                     await signOut({
                       redirectTo: "/",
                     });
@@ -79,6 +78,5 @@ export const Navbar = async () => {
           </Button>
         )}
       </div>
-    </>
-  );
+    );
 };
