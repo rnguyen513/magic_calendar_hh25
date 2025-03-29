@@ -1,35 +1,36 @@
-import { Metadata } from "next";
-import { Toaster } from "sonner";
-
-import { Navbar } from "@/components/custom/navbar";
-import { ThemeProvider } from "@/components/custom/theme-provider";
-
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/custom/theme-provider";
+import { Toaster } from "sonner";
+import { Navbar } from "@/components/custom/navbar";
 
-// TODO: change metadata
+const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://gemini.vercel.ai"),
-  title: "My Magic Calendar",
-  description: "Canvas LMS integration that provides smart suggestions and advice.",
+  title: "Mina Scheduler with Canvas Integration",
+  description: "An AI-powered scheduling app with Canvas integration",
 };
 
 export default async function RootLayout({
-    children,
-  }: Readonly<{ children: React.ReactNode }>) {
-    return (
-      <html lang="en">
-        <body className="antialiased flex flex-col min-h-screen">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Toaster position="top-center" />
-            <Navbar />
-            <main className="flex-grow">{children}</main>
-          </ThemeProvider>
-        </body>
-      </html>
-    );
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={`${inter.className} antialiased flex flex-col min-h-screen`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Toaster position="top-center" />
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }

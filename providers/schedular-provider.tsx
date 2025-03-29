@@ -337,7 +337,14 @@ export const SchedulerProvider = ({
 
   return (
     <SchedulerContext.Provider
-      value={{ events: state, dispatch, getters, handlers, weekStartsOn }}
+      value={{
+        events: state.events, // Direct access to events array
+        state, // For backward compatibility
+        dispatch,
+        getters,
+        handlers,
+        weekStartsOn,
+      }}
     >
       <ModalProvider>{children}</ModalProvider>
     </SchedulerContext.Provider>

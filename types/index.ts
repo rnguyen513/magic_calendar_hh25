@@ -69,7 +69,8 @@ export interface Getters {
 
 // Define the context value interface
 export interface SchedulerContextType {
-  events: SchedulerState;
+  events: Event[];  // Direct access to events array
+  state: SchedulerState; // For backward compatibility
   dispatch: Dispatch<Action>;
   getters: Getters;
   handlers: Handlers;
