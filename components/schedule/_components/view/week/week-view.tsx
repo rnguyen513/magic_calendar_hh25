@@ -350,8 +350,8 @@ export default function WeeklyView({
             </span>
           </div>
 
-          <div className="col-span-7 flex flex-col relative">
-            <div 
+          <div className="max-h-screen overflow-y-auto col-span-7 flex flex-col relative">
+            <div
               className="grid gap-0 flex-grow bg-primary/10 rounded-r-lg" 
               style={{ 
                 gridTemplateColumns: colWidth.map(w => `${w}fr`).join(' '),
@@ -608,7 +608,7 @@ export default function WeeklyView({
                 return (
                   <div
                     key={`day-${dayIndex}`}
-                    className="col-span-1 border-default-200 z-20 relative transition duration-300 cursor-pointer border-r border-b text-center text-sm text-muted-foreground overflow-hidden"
+                    className="col-span-1 border-default-200 z-20 relative transition duration-300 cursor-pointer border-r border-b text-center text-sm text-muted-foreground overflow-auto"
                     onClick={() => {
                       handleAddEventWeek(dayIndex, detailedHour as string);
                     }}

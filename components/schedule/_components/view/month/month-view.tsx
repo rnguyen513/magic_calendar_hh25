@@ -172,20 +172,20 @@ export default function MonthView({
     0
   ).getDate();
   return (
-    <div>
-      <div className="flex flex-col mb-4">
+    <div className="">
+      <div className="flex flex-col">
         <motion.h2
           key={currentDate.getMonth()}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-3xl my-5 tracking-tighter font-bold"
+          className="text-3xl tracking-tighter font-bold"
         >
           {currentDate.toLocaleString("default", { month: "long" })}{" "}
           {currentDate.getFullYear()}
         </motion.h2>
-        <div className="flex gap-3">
+        <div className="flex gap-3 my-2">
           {prevButton ? (
             <div onClick={handlePrevMonth}>{prevButton}</div>
           ) : (
@@ -212,6 +212,7 @@ export default function MonthView({
           )}
         </div>
       </div>
+      <div className="max-h-[calc(100vh-200px)] overflow-auto">
       <AnimatePresence initial={false} custom={direction} mode="wait">
         <motion.div
           key={`${currentDate.getFullYear()}-${currentDate.getMonth()}`}
@@ -234,14 +235,14 @@ export default function MonthView({
           {daysOfWeek.map((day, idx) => (
             <div
               key={idx}
-              className="text-left my-8 text-4xl tracking-tighter font-medium"
+              className="text-left my-2 text-4xl tracking-tighter font-medium"
             >
               {day}
             </div>
           ))}
 
           {Array.from({ length: startOffset }).map((_, idx) => (
-            <div key={`offset-${idx}`} className="h-[150px] opacity-50">
+            <div key={`offset-${idx}`} className="opacity-50">
               <div className={clsx("font-semibold relative text-3xl mb-1")}>
                 {lastDateOfPrevMonth - startOffset + idx + 1}
               </div>
@@ -253,7 +254,7 @@ export default function MonthView({
 
             return (
               <motion.div
-                className="hover:z-50 border-none h-[150px] rounded group flex flex-col"
+                className="hover:z-50 border-none rounded group flex flex-col"
                 key={dayObj.day}
                 variants={itemVariants}
                 initial="enter"
@@ -319,7 +320,7 @@ export default function MonthView({
                   {/* Hover Text */}
                   {dayEvents.length === 0 && (
                     <div className="absolute inset-0 bg-primary/20 bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="text-black tracking-tighter text-lg font-semibold">
+                      <span className="text-black opacity-50 absolute right-2 tracking-tighter text-xs font-semibold">
                         Add Event
                       </span>
                     </div>
@@ -330,6 +331,7 @@ export default function MonthView({
           })}
         </motion.div>
       </AnimatePresence>
+      </div>
     </div>
   );
 }

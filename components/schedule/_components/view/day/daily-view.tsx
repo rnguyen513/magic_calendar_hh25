@@ -334,7 +334,7 @@ export default function DailyView({
             x: { type: "spring", stiffness: 300, damping: 30 },
             opacity: { duration: 0.2 },
           }}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-4 max-h-screen overflow-y-auto"
         >
           {!stopDayEventSummary && (
             <div className="all-day-events">

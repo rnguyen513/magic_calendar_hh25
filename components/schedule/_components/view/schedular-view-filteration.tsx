@@ -26,7 +26,7 @@ const animationConfig = {
 
 export default function SchedulerViewFilteration({
   views = {
-    views: ["day", "week", "month"],
+    views: ["month", "week", "day"],
     mobileViews: ["day"],
   },
   stopDayEventSummary = false,
@@ -39,7 +39,7 @@ export default function SchedulerViewFilteration({
   classNames?: ClassNames;
 }) {
   const { setOpen } = useModal();
-  const [activeView, setActiveView] = useState<string>("day");
+  const [activeView, setActiveView] = useState<string>("month");
   const [clientSide, setClientSide] = useState(false);
 
   console.log("activeView", activeView);
