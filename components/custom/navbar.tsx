@@ -34,8 +34,18 @@ export const Navbar = async () => {
             <div className="text-sm dark:text-zinc-300 truncate w-28 md:w-fit">
               Next.js Gemini Chatbot
             </div>
+
           </div>
         </div>
+
+        <div className="flex items-center justify-center">
+          <button
+            className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg
+               px-6 py-3 text-base hover:scale-105 hover:brightness-110 transition-all duration-200">
+            Start Chat
+          </button>
+        </div>
+
 
         <div className="flex items-center gap-2">
           <Button className="py-1.5 px-2 h-fit font-normal" variant="ghost" asChild>
