@@ -1,0 +1,40 @@
+---
+description: Tech-stack description
+globs: 
+alwaysApply: true
+---
+---
+
+## **Tech Stack Overview**
+We are leveraging **modern web technologies** to build a scalable, performant, and AI-integrated solution.
+
+### **1. Next.js (App Router)**
+- We are using **Next.js (App Router)** for **server-side rendering (SSR)** and **React Server Components (RSCs)** to improve performance.
+- Advanced **routing and API handling** allows us to fetch and process data efficiently.
+- The backend logic (AI requests, file processing) will be managed through **server actions** and API routes.
+
+### **2. AI SDK (Vercel)**
+- This gives us **a unified API** to interact with various **LLMs** (Google Gemini 1.5 Pro by default, but we can swap to OpenAI, Anthropic, etc.).
+- We will be using AI for:
+  - **Extracting structured data from LMS (Canvas)**
+  - **Summarizing notes**
+  - **Prioritizing tasks based on metadata & sentiment analysis**
+  - **Generating interactive quizzes**
+
+### **3. Database: Vercel Postgres (Neon)**
+- Used for **storing chat history, user tasks, notes metadata, and calendar events.**
+- Schema is managed with **Drizzle ORM** for type-safe and efficient queries.
+
+### **4. Storage: Vercel Blob**
+- Handles **file uploads (PDFs, text, audio)** for AI processing.
+- Supports fast retrieval and AI-based summarization.
+
+### **5. Authentication: NextAuth.js**
+- We will use **NextAuth.js** for authentication.
+- Supports Google, GitHub, and email/password login.
+
+### **6. Styling & UI Components**
+- **Tailwind CSS** for styling.
+- **shadcn/ui** and **Radix UI** for accessible, flexible components.
+
+---
