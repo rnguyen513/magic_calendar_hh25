@@ -11,7 +11,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { path: string[] } }
 ) {
-  console.log('Canvas API proxy called with path:', params.path);
+  // console.log('Canvas API proxy called with path:', params.path);
   
   try {
     // Validate token existence
@@ -33,7 +33,7 @@ export async function GET(
       apiUrl += url.search;
     }
 
-    console.log('Proxying request to Canvas API:', apiUrl);
+    // console.log('Proxying request to Canvas API:', apiUrl);
 
     // Make the request to Canvas API
     const canvasResponse = await fetch(apiUrl, {
@@ -53,7 +53,7 @@ export async function GET(
 
     // Get response data
     const data = await canvasResponse.json();
-    console.log('Canvas API proxy response successful');
+    // console.log('Canvas API proxy response successful');
     
     return NextResponse.json(data);
   } catch (error) {
