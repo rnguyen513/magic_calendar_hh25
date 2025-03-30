@@ -6,7 +6,6 @@ import { Chat as PreviewChat } from "@/components/custom/chat";
 import { getChatById } from "@/db/queries";
 import { Chat } from "@/db/schema";
 import { convertToUIMessages } from "@/lib/utils";
-
 import { SchedulerProvider } from "@/providers/schedular-provider";
 
 export default async function Page({ params }: { params: any }) {
