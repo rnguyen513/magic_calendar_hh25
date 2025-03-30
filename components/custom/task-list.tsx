@@ -1,6 +1,14 @@
 import { useScheduler } from "@/providers/schedular-provider";
 import { useState, useEffect } from "react";
 
+const variantClasses = {
+    success: "bg-green-200/40", // Lightened green with lower opacity
+    primary: "bg-blue-200/40", // Lightened blue with lower opacity
+    default: "bg-gray-300/40", // Neutral gray with lowered opacity
+    warning: "bg-yellow-200/40", // Lightened yellow with lowered opacity
+    danger: "bg-red-200/40" // Lightened red with lowered opacity
+};
+
 const TaskList = () => {
   const { events } = useScheduler();
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +46,7 @@ const TaskList = () => {
           // Display tasks
           <ul className="space-y-3">
             {events.map((event) => (
-              <li key={event.id} className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition">
+              <li key={event.id} className={`p-4 ${variantClasses[event.variant ?? "default"]} dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition`}>
                 <strong className="text-gray-900 dark:text-gray-100">{event.title}</strong>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   {new Date(event.endDate).toLocaleString()}

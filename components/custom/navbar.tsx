@@ -25,9 +25,11 @@ export const Navbar = async () => {
         <div className="flex items-center gap-2">
           <Image src="/images/gemini-logo.png" height={24} width={24} alt="Gemini logo" />
           <SlashIcon size={18}/>
-          <span className="text-sm font-medium dark:text-gray-300 truncate w-32 md:w-auto">
-            My Magic Calendar
-          </span>
+          <Link href="/">
+            <span className="text-sm font-medium dark:text-gray-300 truncate w-32 md:w-auto">
+                My Magic Calendar
+            </span>
+          </Link>
         </div>
       </div>
 
