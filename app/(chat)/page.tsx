@@ -537,7 +537,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t bg-muted w-full">
-        <div className="container mx-auto flex flex-col gap-6 py-8 md:py-12 px-4 md:px-6">
+        <div className="container mx-auto flex flex-col gap-6 py-8 md:py-12 px-4 md:px-6 blur-sm">
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
