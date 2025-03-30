@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getFolderById, getDocumentsByFolderId, deleteFolderById } from "@/db/queries";
+import { 
+  getFolderById, 
+  getDocumentsByFolderId, 
+  deleteFolderById, 
+  deleteDocumentById, 
+  deleteGeneratedContentByDocumentId 
+} from "@/db/queries";
 import { auth } from "@/app/(auth)/auth";
+import { del } from "@vercel/blob";
 
 // GET /api/folders/[folderId] - Get a specific folder and its documents
 export async function GET(
@@ -79,6 +86,23 @@ export async function DELETE(
         { error: "You don't have permission to delete this folder" },
         { status: 403 }
       );
+    }
+    
+    // Get all documents in the folder
+    const documents = await getDocumentsByFolderId({ folderId });
+    
+    // Delete all documents in the folder first
+    for (const document of documents) {
+      // Delete any generated content associated with the document
+      await deleteGeneratedContentByDocumentId({ documentId: document.id });
+      
+      // Delete the document from Vercel Blob storage
+      if (document.blobUrl) {
+        await del(document.blobUrl);
+      }
+      
+      // Delete the document from the database
+      await deleteDocumentById({ id: document.id });
     }
     
     // Delete the folder

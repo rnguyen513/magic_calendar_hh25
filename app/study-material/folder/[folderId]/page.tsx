@@ -12,7 +12,8 @@ import {
   BookOpen, 
   Brain,
   MoreHorizontal,
-  Plus
+  Plus,
+  History
 } from "lucide-react";
 import { Button } from "@/components/quizzes_components/ui/button";
 import {
@@ -41,6 +42,7 @@ import {
 } from "@/components/quizzes_components/ui/dropdown-menu";
 import { AnimatePresence, motion } from "framer-motion";
 import { Progress } from "@/components/quizzes_components/ui/progress";
+import GeneratedContentModal from "@/components/quizzes_components/generated-content-modal";
 
 // Define types for folder and document
 type Folder = {
@@ -72,6 +74,10 @@ export default function FolderDetailPage({ params }: { params: { folderId: strin
   const [activeMode, setActiveMode] = useState<'quiz' | 'summary'>('quiz');
   const [isDragging, setIsDragging] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
+  // New state for content history modal
+  const [isContentHistoryOpen, setIsContentHistoryOpen] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   
   // Fetch folder details and documents
   useEffect(() => {
@@ -201,6 +207,13 @@ export default function FolderDetailPage({ params }: { params: { folderId: strin
   // Navigate to document viewer
   const handleViewDocument = (blobUrl: string) => {
     window.open(blobUrl, '_blank');
+  };
+
+  // Open content history modal for a document
+  const handleViewContentHistory = (e: React.MouseEvent, document: Document) => {
+    e.stopPropagation(); // Prevent folder click navigation
+    setSelectedDocument(document);
+    setIsContentHistoryOpen(true);
   };
 
   // Format bytes to human-readable size
@@ -404,14 +417,17 @@ export default function FolderDetailPage({ params }: { params: { folderId: strin
             <h2 className="text-xl font-bold mb-4">Your Documents</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {documents.map((document) => (
-                <Card key={document.id} className="transition-all hover:shadow-md">
+                <Card 
+                  key={document.id}
+                  className="cursor-pointer transition-all hover:shadow-md relative group"
+                >
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <div className="rounded-full bg-primary/10 p-2 mr-3">
                           <File className="h-5 w-5" />
                         </div>
-                        <CardTitle className="text-lg truncate" title={document.fileName}>
+                        <CardTitle className="text-xl truncate" title={document.fileName}>
                           {document.fileName}
                         </CardTitle>
                       </div>
@@ -431,22 +447,54 @@ export default function FolderDetailPage({ params }: { params: { folderId: strin
                           <DropdownMenuItem onClick={() => router.push(`/summary?documentId=${document.id}`)}>
                             Generate Summary
                           </DropdownMenuItem>
+                          <DropdownMenuItem onClick={(e) => handleViewContentHistory(e, document)}>
+                            View History
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex justify-between text-sm text-muted-foreground">
-                      <span>Size: {formatFileSize(document.fileSize)}</span>
-                      <span>Added: {formatDate(document.createdAt)}</span>
-                    </div>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Size: {formatFileSize(document.fileSize)}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Uploaded: {formatDate(document.createdAt)}
+                    </p>
                   </CardContent>
+                  <CardFooter className="flex justify-between">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleViewDocument(document.blobUrl)}
+                    >
+                      View Document
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => handleViewContentHistory(e, document)}
+                      title="View Content History"
+                    >
+                      <History className="h-4 w-4" />
+                    </Button>
+                  </CardFooter>
                 </Card>
               ))}
             </div>
           </div>
         )}
       </div>
+
+      {/* Add the content history modal */}
+      {selectedDocument && (
+        <GeneratedContentModal
+          documentId={selectedDocument.id}
+          documentName={selectedDocument.fileName}
+          open={isContentHistoryOpen}
+          onOpenChange={setIsContentHistoryOpen}
+        />
+      )}
     </div>
   );
 } 

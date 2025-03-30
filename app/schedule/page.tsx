@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import { SchedulerProvider } from '@/providers/schedular-provider';
 import SchedulerView from '@/components/schedule/_components/view/schedular-view';
 import { CalendarLoader } from '@/components/schedule/calendar-loader';
+import { SyllabusLoader } from '@/components/schedule/syllabus-loader';
 
 /**
- * Schedule page that displays a calendar with Canvas assignments
+ * Schedule page that displays a calendar with Canvas assignments and syllabus events
  * The CalendarLoader component handles auto-loading Canvas assignments
+ * The SyllabusLoader component handles syllabus PDF upload and processing
  */
 export default function SchedulePage() {
   return (
@@ -17,6 +19,7 @@ export default function SchedulePage() {
       {/* Wrap the calendar view with the SchedulerProvider */}
       <SchedulerProvider>
         <CalendarLoader/>
+        <SyllabusLoader debug={true}/>
         <SchedulerView/>
       </SchedulerProvider>
     </div>
