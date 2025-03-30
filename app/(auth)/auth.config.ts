@@ -12,9 +12,10 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       let isLoggedIn = !!auth?.user;
-      let isOnChat = nextUrl.pathname.startsWith("/");
+      let isOnChat = nextUrl.pathname.startsWith("/in");
       let isOnRegister = nextUrl.pathname.startsWith("/register");
       let isOnLogin = nextUrl.pathname.startsWith("/login");
+      let isOnStudy = nextUrl.pathname.startsWith("/study-material")
 
       if (isLoggedIn && (isOnLogin || isOnRegister)) {
         return Response.redirect(new URL("/", nextUrl));
@@ -24,7 +25,7 @@ export const authConfig = {
         return true; // Always allow access to register and login pages
       }
 
-      if (isOnChat) {
+      if (isOnChat || isOnStudy) {
         if (isLoggedIn) return true;
         return false; // Redirect unauthenticated users to login page
       }
