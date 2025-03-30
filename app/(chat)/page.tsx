@@ -26,7 +26,7 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
                 <Button size="lg" asChild>
-                  <Link href="/signup">Start for Free</Link>
+                  <Link href="/login">Start Now</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
                   <Link href="#how-it-works">
@@ -195,10 +195,10 @@ export default function LandingPage() {
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>Automatic task prioritization based on deadlines and importance</span>
                       </li>
-                      <li className="flex items-start gap-2">
+                      {/* <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>Intelligent time blocking for deep focus sessions</span>
-                      </li>
+                      </li> */}
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>Real-time adjustments based on your progress and feedback</span>
@@ -225,10 +225,10 @@ export default function LandingPage() {
                       understanding and help reinforce key concepts.
                     </p>
                     <ul className="space-y-2">
-                      <li className="flex items-start gap-2">
+                      {/* <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>Multiple quiz formats including multiple choice, short answer, and matching</span>
-                      </li>
+                      </li> */}
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>Adaptive difficulty based on your performance</span>
@@ -263,14 +263,14 @@ export default function LandingPage() {
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>Automatic organization of information into logical sections</span>
                       </li>
-                      <li className="flex items-start gap-2">
+                      {/* <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>Visual elements like charts and diagrams to enhance understanding</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                         <span>Customizable templates for different types of study materials</span>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                   <div className="rounded-xl border bg-background p-2 shadow-lg">
@@ -322,7 +322,7 @@ export default function LandingPage() {
                     />
                   </div>
                   <div>
-                    <h4 className="font-semibold">Sarah Johnson</h4>
+                    <h4 className="font-semibold">Ryan Nguyen</h4>
                     <p className="text-sm text-muted-foreground">Computer Science Student</p>
                   </div>
                 </div>
@@ -343,7 +343,7 @@ export default function LandingPage() {
                 <div className="flex items-center gap-4">
                   <div className="rounded-full bg-primary/10 p-1">
                     <Image
-                      src="/images/roy.png"
+                      src="/images/roy.jpeg"
                       width={40}
                       height={40}
                       alt="Avatar"
@@ -351,12 +351,12 @@ export default function LandingPage() {
                     />
                   </div>
                   <div>
-                    <h4 className="font-semibold">Michael Rodriguez</h4>
-                    <p className="text-sm text-muted-foreground">Biology Professor</p>
+                    <h4 className="font-semibold">Roy Alcala</h4>
+                    <p className="text-sm text-muted-foreground">Computer Science Student</p>
                   </div>
                 </div>
                 <p className="text-muted-foreground">
-                  "I recommend MyCally to all my students. The PDF generator creates excellent study materials from
+                  "I recommend MyCally to everyone. The PDF generator creates excellent study materials from
                   lecture notes, saving me time in creating resources."
                 </p>
               </div>
@@ -380,8 +380,8 @@ export default function LandingPage() {
                     />
                   </div>
                   <div>
-                    <h4 className="font-semibold">Emily Chen</h4>
-                    <p className="text-sm text-muted-foreground">MBA Student</p>
+                    <h4 className="font-semibold">Manny Lopez</h4>
+                    <p className="text-sm text-muted-foreground">Computer Science Student</p>
                   </div>
                 </div>
                 <p className="text-muted-foreground">
@@ -395,7 +395,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="bg-muted py-20 w-full">
+      <section id="pricing" className="bg-muted py-20 w-full blur-sm">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
@@ -432,8 +432,8 @@ export default function LandingPage() {
                     <span>PDF Creator (3 per month)</span>
                   </li>
                 </ul>
-                <Button variant="outline" className="w-full mt-auto" asChild>
-                  <Link href="/signup">Get Started</Link>
+                <Button variant="outline" disabled className="w-full mt-auto" asChild>
+                  <Link href="/login">Get Started</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -468,8 +468,8 @@ export default function LandingPage() {
                     <span>Smart Insights</span>
                   </li>
                 </ul>
-                <Button className="w-full mt-auto" asChild>
-                  <Link href="/signup">Start 7-Day Trial</Link>
+                <Button className="w-full mt-auto" disabled asChild>
+                  <Link href="/login">Start 7-Day Trial</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -501,8 +501,8 @@ export default function LandingPage() {
                     <span>Custom Templates</span>
                   </li>
                 </ul>
-                <Button variant="outline" className="w-full mt-auto" asChild>
-                  <Link href="/signup">Start 7-Day Trial</Link>
+                <Button variant="outline" disabled className="w-full mt-auto" asChild>
+                  <Link href="/login">Start 7-Day Trial</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -525,7 +525,7 @@ export default function LandingPage() {
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" asChild>
-                <Link href="/signup">Start Free Trial</Link>
+                <Link href="/login">Start Now</Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
                 <Link href="#features">Explore Features</Link>
