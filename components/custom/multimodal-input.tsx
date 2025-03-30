@@ -23,8 +23,8 @@ import { useScheduler } from "@/providers/schedular-provider";
 
 const suggestedActions = [
   {
-    title: "How many upcoming assigments do I have",
-    label: "from 3/29 to 4/5",
+    title: "How many upcoming assigments",
+    label: "do I have from 3/29 to 4/5?",
     action: "Tell me how many assignments I have to complete next week",
   },
   {
@@ -92,7 +92,6 @@ export function MultimodalInput({
   const submitForm = useCallback(() => {
     handleSubmit(undefined, {
       experimental_attachments: attachments,
-      body: {messages: "\nHere are my upcoming events:\n" + JSON.stringify(events, null, 2)},
     });
 
     setAttachments([]);

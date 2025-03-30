@@ -94,7 +94,8 @@ export const History = ({ user }: { user: User | undefined }) => {
           setIsHistoryVisible(true);
         }}
       >
-        <MenuIcon />
+        {/* <MenuIcon /> */}
+        AI Chats
       </Button>
 
       <Sheet
