@@ -1,66 +1,31 @@
-<a href="https://chat.vercel.ai/">
-  <img alt="Next.js 14 and App Router-ready AI chatbot." src="app/(chat)/opengraph-image.png">
-  <h1 align="center">Next.js Gemini Chatbot</h1>
-</a>
+# MyCally - Your All-in-One Study Companion
 
-<p align="center">
-  An Open-Source AI Chatbot Template Built With Next.js and the AI SDK by Vercel.
-</p>
+### ‼️ IMPORTANT
+Cally currently uses a hardcoded Canvas API key that's tied to a demo account. Canvas only allows AUTHORIZED and VETTED 3rd party apps to integrate with OAuth2, which would allow a user to "sign in with Canvas". We aren't an official partner of Canvas, so that's impossible at this stage. Nevertheless, all other features such as quiz/summary generation and syllabus (or other documents) upload is still functional. We hope you see the vision!
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#model-providers"><strong>Model Providers</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a>
-</p>
-<br/>
+## 📌 Inspiration  
+College students juggle assignments, extracurriculars, and personal responsibilities, often feeling overwhelmed. We envisioned an application that simplifies academic life by combining learning, studying, and productivity tracking—all in one place.  
 
-## Features
+## 🚀 What It Does  
+MyCally seamlessly integrates with Canvas, allowing students to sync their courses and assignments. The app automatically extracts course data and generates a personalized calendar with due dates.  
 
-- [Next.js](https://nextjs.org) App Router
-  - Advanced routing for seamless navigation and performance
-  - React Server Components (RSCs) and Server Actions for server-side rendering and increased performance
-- [AI SDK](https://sdk.vercel.ai/docs)
-  - Unified API for generating text, structured objects, and tool calls with LLMs
-  - Hooks for building dynamic chat and generative user interfaces
-  - Supports Google (default), OpenAI, Anthropic, Cohere, and other model providers
-- [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - Component primitives from [Radix UI](https://radix-ui.com) for accessibility and flexibility
-- Data Persistence
-  - [Vercel Postgres powered by Neon](https://vercel.com/storage/postgres) for saving chat history and user data
-  - [Vercel Blob](https://vercel.com/storage/blob) for efficient object storage
-- [NextAuth.js](https://github.com/nextauthjs/next-auth)
-  - Simple and secure authentication
+### Key Features:  
+✅ **Smart Calendar** – Organizes assignments and deadlines for better time management.  
+✅ **AI-Powered Study Tools**:  
+   - **Quiz Generator** – Creates quizzes based on inputted study material.  
+   - **Summary Generator** – Summarizes content to enhance learning efficiency.  
+✅ **AI Chatbot** – Provides instant answers on study content, deadlines, and academic queries.  
 
-## Model Providers
+## 🛠️ How We Built It  
+MyCally is built using:  
+- **Next.js 14** for a seamless front-end experience.  
+- **Vercel’s AI SDK** for intelligent chatbot functionalities.  
+- **Canvas API** to fetch courses, assignments, and grades.  
 
-This template ships with Google Gemini `gemini-1.5-pro` models as the default. However, with the [AI SDK](https://sdk.vercel.ai/docs), you can switch LLM providers to [OpenAI](https://openai.com), [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), and [many more](https://sdk.vercel.ai/providers/ai-sdk-providers) with just a few lines of code.
+Users link their Canvas accounts by providing an access token, which enables the app to pull relevant academic data, format it in JSON, and integrate it into AI-powered study tools.  
 
-## Deploy Your Own
+## ⚡ Challenges We Faced  
+One major challenge was accessing user data without a Canvas API developer or admin key. To work around this, we currently require users to manually input their Canvas Access Tokens for full functionality.  
 
-You can deploy your own version of the Next.js AI Chatbot to Vercel with one click:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fgemini-chatbot&env=AUTH_SECRET,GOOGLE_GENERATIVE_AI_API_KEY&envDescription=Learn%20more%20about%20how%20to%20get%20the%20API%20Keys%20for%20the%20application&envLink=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fgemini-chatbot%2Fblob%2Fmain%2F.env.example&demo-title=Next.js%20Gemini%20Chatbot&demo-description=An%20Open-Source%20AI%20Chatbot%20Template%20Built%20With%20Next.js%20and%20the%20AI%20SDK%20by%20Vercel.&demo-url=https%3A%2F%2Fgemini.vercel.ai&stores=[{%22type%22:%22postgres%22},{%22type%22:%22blob%22}])
-
-## Running locally
-
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js AI Chatbot. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
-
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various Google Cloud and authentication provider accounts.
-
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
-
-```bash
-pnpm install
-pnpm dev
-```
-
-Your app template should now be running on [localhost:3000](http://localhost:3000/).
-
-
-If you're comfortable using elevated privileges, you can run the command with sudo:
-sudo npm i -g vercel
-to get started 
+---  
+📚 **MyCally** is designed to keep students organized, efficient, and stress-free. Stay on top of your studies with ease! 🚀
