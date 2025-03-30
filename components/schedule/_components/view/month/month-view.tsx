@@ -47,7 +47,7 @@ export default function MonthView({
   const { getters, weekStartsOn } = useScheduler();
   const { setOpen } = useModal();
 
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date(2025, 3, 15));
   const [direction, setDirection] = useState<number>(0);
 
   const daysInMonth = getters.getDaysInMonth(

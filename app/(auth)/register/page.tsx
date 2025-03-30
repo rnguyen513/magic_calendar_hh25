@@ -31,6 +31,7 @@ export default function Page() {
     } else if (state.status === "success") {
       toast.success("Account created successfully");
       router.refresh();
+      router.push("/login");
     }
   }, [state, router]);
 

@@ -15,7 +15,14 @@ export const authConfig = {
       let isOnChat = nextUrl.pathname.startsWith("/in");
       let isOnRegister = nextUrl.pathname.startsWith("/register");
       let isOnLogin = nextUrl.pathname.startsWith("/login");
-      let isOnStudy = nextUrl.pathname.startsWith("/study-material")
+      let isOnStudy = nextUrl.pathname.startsWith("/study-material");
+      console.log("isOnStudy? " + isOnStudy);
+
+      return false
+
+      if (isOnChat || isOnStudy) {
+        return isLoggedIn ? true : false; // Redirects to `signIn: "/login"` when not logged in
+      }
 
       if (isLoggedIn && (isOnLogin || isOnRegister)) {
         return Response.redirect(new URL("/", nextUrl));
@@ -23,11 +30,6 @@ export const authConfig = {
 
       if (isOnRegister || isOnLogin) {
         return true; // Always allow access to register and login pages
-      }
-
-      if (isOnChat || isOnStudy) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
       }
 
       if (isLoggedIn) {
