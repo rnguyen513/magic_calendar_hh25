@@ -25,7 +25,7 @@ export function Chat({
       id,
       body: { 
         id,
-        // messages: "\nHere are my upcoming events:\n" + JSON.stringify(events, null, 2)
+        extraInfo: "\nHere are my upcoming events:\n" + JSON.stringify(events, null, 2)
       }, // Convert Date objects to ISO strings
       initialMessages,
       maxSteps: 10,

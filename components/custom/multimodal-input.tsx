@@ -91,7 +91,7 @@ export function MultimodalInput({
 
   const submitForm = useCallback(() => {
     handleSubmit(undefined, {
-      experimental_attachments: attachments
+      experimental_attachments: attachments,
     });
 
     setAttachments([]);

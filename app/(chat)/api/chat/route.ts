@@ -19,9 +19,11 @@ import {
 import { generateUUID } from "@/lib/utils";
 
 export async function POST(request: Request) {
-    console.log("Request: " + request)
-  const { id, messages }: { id: string; messages: Array<Message> } =
+  const { id, messages, extraInfo }: { id: string; messages: Array<Message>, extraInfo: any} =
     await request.json();
+
+    // console.log("Request json: " + await request.json());
+    // console.log("id, message: " + id);
 
   const session = await auth();
 
@@ -33,11 +35,15 @@ export async function POST(request: Request) {
     (message) => message.content.length > 0,
   );
 
+  console.log("coreMessages: " + JSON.stringify(coreMessages));
+  console.log("extraInfo: " + extraInfo)
+
   const result = await streamText({
     model: geminiProModel,
     system: `\n
         - you help users stay up to date with their Canvas assignments!
         - today's date is ${new Date().toLocaleDateString()}.
+        - the user's events (assignments) are ${extraInfo}
       `,
     messages: coreMessages,
     // tools: {
