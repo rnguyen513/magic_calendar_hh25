@@ -21,8 +21,7 @@ export const Navbar = async () => {
     <nav className="bg-white dark:bg-gray-900 w-full py-3 px-6 flex items-center justify-between shadow-sm border-b border-gray-200 dark:border-gray-800">
       {/* Left Side: Logo & History */}
       <div className="flex items-center gap-4">
-        <History user={session?.user} />
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
           <Image src="/images/gemini-logo.png" height={24} width={24} alt="Gemini logo" />
           <SlashIcon size={18}/>
           <Link href="/">
@@ -31,14 +30,12 @@ export const Navbar = async () => {
             </span>
           </Link>
         </div>
+        <History user={session?.user} />
+        <NavLink href="/study-material" label="Study Material"/>
       </div>
 
       {/* Right Side: Navigation & User Menu */}
       <div className="flex items-center gap-3">
-        <NavLink href="/" label="Home" />
-        <NavLink href="/study-material" label="Study Material" />
-        <NavLink href="/chat" label="AI Chats"/>
-
         {session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
