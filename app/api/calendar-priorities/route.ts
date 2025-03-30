@@ -9,9 +9,6 @@ import { transformAssignmentsToEvents } from '../../../lib/services/calendar-eve
  */
 export async function POST(req: NextRequest) {
   try {
-    // Log the request
-    console.log('Received request to prioritize assignments');
-    
     // Parse the request body
     const assignments: ProcessedAssignment[] = await req.json();
     
@@ -34,17 +31,11 @@ export async function POST(req: NextRequest) {
       );
     }
     
-    console.log(`Processing ${assignments.length} assignments with Gemini AI`);
-    
     // Process assignments with Gemini
     const prioritizedAssignments = await getPrioritizedAssignments(assignments);
     
-    console.log('Assignments prioritized, transforming to calendar events');
-    
     // Transform to calendar events
     const calendarEvents = transformAssignmentsToEvents(prioritizedAssignments);
-    
-    console.log(`Transformed ${calendarEvents.length} assignments into calendar events`);
     
     // Return both the prioritized assignments and calendar events
     return NextResponse.json({
