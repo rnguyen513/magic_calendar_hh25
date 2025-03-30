@@ -72,7 +72,7 @@ export async function fetchAndProcessCanvasAssignments(): Promise<{
 }> {
   try {
     // Step 1: Fetch assignments from Canvas
-    console.log("Fetching assignments from Canvas...");
+    // console.log("Fetching assignments from Canvas...");
     const assignments = await getAllUpcomingAssignments();
     
     if (assignments.length === 0) {
@@ -80,7 +80,7 @@ export async function fetchAndProcessCanvasAssignments(): Promise<{
       return { events: [], rawAssignments: [] };
     }
     
-    console.log(`Found ${assignments.length} upcoming assignments in Canvas`);
+    // console.log(`Found ${assignments.length} upcoming assignments in Canvas`);
     
     // Step 2: Use Gemini to prioritize assignments
     console.log("Sending assignments to Gemini for prioritization...");
@@ -90,7 +90,7 @@ export async function fetchAndProcessCanvasAssignments(): Promise<{
     console.log("Converting prioritized assignments to calendar events...");
     const events = assignmentsToCalendarEvents(prioritizedAssignments);
     
-    console.log(`Created ${events.length} calendar events from Canvas assignments`);
+    // console.log(`Created ${events.length} calendar events from Canvas assignments`);
     
     return {
       events,

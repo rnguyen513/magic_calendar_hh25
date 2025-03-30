@@ -19,16 +19,18 @@ import useWindowSize from "./use-window-size";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 
+import { useScheduler } from "@/providers/schedular-provider";
+
 const suggestedActions = [
   {
-    title: "Help me book a flight",
-    label: "from San Francisco to London",
-    action: "Help me book a flight from San Francisco to London",
+    title: "How many upcoming assigments do I have",
+    label: "from 3/29 to 4/5",
+    action: "Tell me how many assignments I have to complete next week",
   },
   {
-    title: "What is the status",
-    label: "of flight BA142 flying tmrw?",
-    action: "What is the status of flight BA142 flying tmrw?",
+    title: "What is the most urgent",
+    label: "assignment that's currently posted in Canvas?",
+    action: "What is the most urgent assignment that I have to complete?",
   },
 ];
 
@@ -64,6 +66,8 @@ export function MultimodalInput({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
 
+  const { events } = useScheduler();
+
   useEffect(() => {
     if (textareaRef.current) {
       adjustHeight();
@@ -88,6 +92,7 @@ export function MultimodalInput({
   const submitForm = useCallback(() => {
     handleSubmit(undefined, {
       experimental_attachments: attachments,
+      body: {messages: "\nHere are my upcoming events:\n" + JSON.stringify(events, null, 2)},
     });
 
     setAttachments([]);
@@ -96,6 +101,27 @@ export function MultimodalInput({
       textareaRef.current?.focus();
     }
   }, [attachments, handleSubmit, setAttachments, width]);
+
+//   const submitForm = useCallback(() => {
+//     const enrichedMessage = input + "\n\nHere are my upcoming events:\n" + JSON.stringify(events, null, 2);
+  
+//     append(
+//       {
+//         role: "user",
+//         content: enrichedMessage,
+//       },
+//       {
+//         experimental_attachments: attachments,
+//       }
+//     );
+  
+//     setAttachments([]);
+  
+//     if (width && width > 768) {
+//       textareaRef.current?.focus();
+//     }
+//   }, [attachments, handleSubmit, setAttachments, width, input, events]);
+  
 
   const uploadFile = async (file: File) => {
     const formData = new FormData();

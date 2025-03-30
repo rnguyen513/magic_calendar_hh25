@@ -130,7 +130,7 @@ export async function getActiveCourses(): Promise<CanvasCourse[]> {
  * Get assignments for a specific course
  */
 export async function getCourseAssignments(courseId: number): Promise<CanvasAssignment[]> {
-  console.log(`Getting assignments for course ID: ${courseId}`);
+//   console.log(`Getting assignments for course ID: ${courseId}`);
   try {
     const assignments = await canvasGET<CanvasAssignment[]>(`/courses/${courseId}/assignments?per_page=100`);
     console.log(`Found ${assignments.length} assignments for course ID: ${courseId}`);
@@ -170,7 +170,7 @@ export async function getAllUpcomingAssignments(): Promise<ProcessedAssignment[]
       canvasAssignments = await fetchCanvasAssignments();
     }
     
-    console.log(`Fetched ${canvasAssignments.length} Canvas assignments`);
+    // console.log(`Fetched ${canvasAssignments.length} Canvas assignments`);
     
     // Convert Canvas assignments to our ProcessedAssignment format
     const processedAssignments: ProcessedAssignment[] = canvasAssignments

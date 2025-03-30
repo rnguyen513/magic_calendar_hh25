@@ -20,10 +20,13 @@ export function Chat({
   initialMessages: Array<Message>;
 }) {
     const { events } = useScheduler();
-  const { messages, handleSubmit, input, setInput, append, isLoading, stop } =
+    const { messages, handleSubmit, input, setInput, append, isLoading, stop } =
     useChat({
       id,
-      body: { id },
+      body: { 
+        id,
+        messages: "\nHere are my upcoming events:\n" + JSON.stringify(events, null, 2)
+      }, // Convert Date objects to ISO strings
       initialMessages,
       maxSteps: 10,
       onFinish: () => {
