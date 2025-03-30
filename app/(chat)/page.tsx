@@ -39,7 +39,7 @@ export default function LandingPage() {
             <div className="relative flex items-center justify-center">
               <div className="relative aspect-video overflow-hidden rounded-xl border bg-background shadow-xl">
                 <Image
-                  src="/images/landing.png"
+                  src="/images/landing_gif_2.gif"
                   width={600}
                   height={400}
                   alt="MyCally Dashboard Preview"
