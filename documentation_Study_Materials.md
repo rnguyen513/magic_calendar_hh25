@@ -20,6 +20,197 @@ Magic Calendar is an AI-powered academic productivity assistant designed to help
    - Automatic import of assignments and deadlines
    - Task prioritization based on due dates
 
+## Study Materials System
+
+### Overview
+
+The Study Materials system is a core component of Magic Calendar that allows users to organize and interact with educational content. It provides a folder-based structure for organizing PDF documents and seamlessly integrates with AI-powered features like quiz and summary generation.
+
+### Key Components
+
+1. **Study Materials Dashboard (`app/study-material/page.tsx`)**
+   - Main entry point for the study materials feature
+   - Displays a list of user-created folders
+   - Provides interface for folder creation and management
+   
+2. **Folder Detail Page (`app/study-material/folder/[folderId]/page.tsx`)**
+   - Displays contents of a specific folder
+   - Handles document upload within the folder context
+   - Provides interface for document management and AI processing
+
+3. **Document Management APIs**
+   - Folder operations (`app/api/folders/route.ts` and `app/api/folders/[folderId]/route.ts`)
+   - Document operations (`app/api/documents/[documentId]/route.ts`)
+   - Upload handling (`app/api/folders/[folderId]/documents/route.ts`)
+
+4. **Database Layer**
+   - Schema definitions in `db/schema.ts` (folder and document tables)
+   - Query functions in `db/queries.ts`
+
+### User Flows
+
+#### Folder Management
+
+1. **Creating Folders**
+   - From the Study Materials dashboard, users click "Add Folder"
+   - Enter a folder name in the modal
+   - System creates a new folder entry in the database
+   - Implementation: `createFolder` function in `db/queries.ts`
+
+2. **Viewing Folders**
+   - Study Materials dashboard fetches and displays all folders for the current user
+   - Each folder displays its name and creation date
+   - Implementation: `getFoldersByUserId` function in `db/queries.ts`
+
+3. **Opening Folders**
+   - Users click on a folder or the "Open Folder" button
+   - System navigates to the folder detail page with the specific folder ID
+   - Folder detail page loads document list and folder information
+   - Implementation: `useRouter().push(/study-material/folder/${folderId})` and `getFolderById` function
+
+4. **Deleting Folders**
+   - Users click the delete icon on a folder card
+   - System confirms deletion intent
+   - If confirmed, folder and all contained documents are deleted
+   - Implementation: DELETE request to `/api/folders/[folderId]`
+
+#### Document Management
+
+1. **Uploading Documents**
+   - From a folder detail page, users can:
+     - Drag and drop PDF files onto the upload area
+     - Click to browse and select PDF files
+     - System validates files (PDF only, under 5MB)
+   - Files are stored in Vercel Blob storage
+   - Database entries are created with references to the blob URL
+   - Implementation: POST to `/api/folders/[folderId]/documents`
+
+2. **Viewing Documents**
+   - Documents are listed in the folder with metadata (name, size, upload date)
+   - Users can click "View Document" to open the PDF directly
+   - Implementation: Uses the stored blob URL to display the PDF
+
+3. **Document Actions**
+   - Each document has a context menu with options:
+     - View Document: Opens the PDF in a new tab
+     - Generate Quiz: Redirects to the quiz page with document ID
+     - Generate Summary: Redirects to the summary page with document ID
+     - View History: Shows previously generated content for this document
+   - Implementation: Dropdown menu in folder detail page
+
+### Integration with AI Features
+
+1. **Quiz Generation Flow**
+   - From folder detail, user selects "Generate Quiz" on a document
+   - System navigates to `app/quizzes/page.tsx` with document ID as a parameter
+   - Quiz page fetches document information and preserves folder context
+   - AI processes the document and generates interactive quiz questions
+   - "Try Another PDF" button returns user to the original folder
+
+2. **Summary Generation Flow**
+   - From folder detail, user selects "Generate Summary" on a document
+   - System navigates to `app/summary/page.tsx` with document ID as a parameter
+   - Summary page fetches document information and preserves folder context
+   - AI processes the document and generates a comprehensive summary
+   - "Try Another PDF" button returns user to the original folder
+
+3. **Content History**
+   - Document Content History modal (`components/quizzes_components/generated-content-modal.tsx`)
+   - Displays previously generated quizzes and summaries for a document
+   - Allows users to revisit past AI-generated content
+
+### Technical Implementation
+
+#### Database Schema
+
+The Study Materials system uses two primary tables:
+
+1. **Folder Table**:
+   ```typescript
+   export const folder = pgTable("Folder", {
+     id: text("id").primaryKey().defaultRandom(),
+     folderName: text("folderName").notNull(),
+     userId: text("userId").notNull(),
+     createdAt: timestamp("createdAt").defaultNow(),
+   });
+   ```
+
+2. **Document Table**:
+   ```typescript
+   export const document = pgTable("Document", {
+     id: text("id").primaryKey().defaultRandom(),
+     fileName: text("fileName").notNull(),
+     fileType: text("fileType").notNull(),
+     fileSize: text("fileSize").notNull(),
+     blobUrl: text("blobUrl").notNull(),
+     folderId: text("folderId")
+       .references(() => folder.id)
+       .notNull(),
+     userId: text("userId").notNull(),
+     createdAt: timestamp("createdAt").defaultNow(),
+   });
+   ```
+
+#### API Implementation
+
+1. **Folder API Endpoints**:
+   - `GET /api/folders` - List all folders for the current user
+   - `POST /api/folders` - Create a new folder
+   - `GET /api/folders/[folderId]` - Get a specific folder details
+   - `DELETE /api/folders/[folderId]` - Delete a folder and its contents
+
+2. **Document API Endpoints**:
+   - `POST /api/folders/[folderId]/documents` - Upload a document to a folder
+   - `GET /api/documents/[documentId]` - Get document details
+   - `DELETE /api/documents/[documentId]` - Delete a specific document
+
+3. **Key Implementation Files**:
+   - `app/study-material/page.tsx` - Folder listing and creation
+   - `app/study-material/folder/[folderId]/page.tsx` - Folder detail and document upload
+   - `app/api/folders/[folderId]/documents/route.ts` - Document upload logic
+
+#### Security Considerations
+
+1. **Authorization**:
+   - All API endpoints check for user authentication
+   - Folder and document operations verify ownership
+   - Example:
+     ```typescript
+     // Check if the folder belongs to the current user
+     if (folder.userId !== session.user.id) {
+       return NextResponse.json(
+         { error: "You don't have permission to access this folder" },
+         { status: 403 }
+       );
+     }
+     ```
+
+2. **Validation**:
+   - File uploads are validated for:
+     - File type (PDFs only)
+     - File size (5MB maximum)
+     - Duplicate file names within the same folder
+
+3. **Storage Security**:
+   - Uses Vercel Blob for secure file storage
+   - Document URLs are associated with user accounts
+   - Cross-user access is prevented through authorization checks
+
+### Troubleshooting Common Issues
+
+1. **Folder Deletion**:
+   - Issue: Folders with documents cannot be deleted directly due to foreign key constraints
+   - Solution: API should first delete all documents in the folder before deleting the folder itself
+
+2. **File Upload Limits**:
+   - Issue: Users may try to upload files larger than 5MB
+   - Solution: Client-side and server-side validation prevents oversized uploads
+   - Error messages inform users of size limitations
+
+3. **Navigation Context**:
+   - Issue: After generating quizzes/summaries, users should return to their original folder
+   - Solution: Folder ID is preserved and used for navigation to maintain context
+
 ## Folder Structure
 
 The application follows Next.js App Router architecture:
