@@ -1,7 +1,7 @@
 import { questionSchema, questionsSchema } from "@/lib/schemas";
 import { google } from "@ai-sdk/google";
 import { streamObject } from "ai";
-import { getDocumentById, createGeneratedContent } from "@/db/queries";
+import { getDocumentById, createGeneratedContent, getGeneratedContentByDocumentId } from "@/db/queries";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/(auth)/auth";
 
@@ -125,11 +125,18 @@ export async function POST(req: NextRequest) {
           // Save generated content if this was a request from a document
           if (documentId) {
             try {
-              await createGeneratedContent({
-                contentType: 'quiz',
-                content: object,
-                documentId,
-              });
+              // Check if a quiz already exists for this document
+              const existingContent = await getGeneratedContentByDocumentId({ documentId });
+              const existingQuizzes = existingContent.filter(item => item.contentType === 'quiz');
+              
+              // Only save if there's no existing quiz or save is forced
+              if (existingQuizzes.length === 0) {
+                await createGeneratedContent({
+                  contentType: 'quiz',
+                  content: object,
+                  documentId,
+                });
+              }
             } catch (error) {
               console.error("Error saving generated content:", error);
               // Continue even if saving fails

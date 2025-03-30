@@ -267,6 +267,16 @@ export async function getDocumentById({ id }: { id: string }): Promise<Document 
   }
 }
 
+export async function deleteDocumentById({ id }: { id: string }) {
+  try {
+    await db.delete(document).where(eq(document.id, id));
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete document from database");
+    throw error;
+  }
+}
+
 export async function checkDocumentExists({ fileName, folderId }: { fileName: string; folderId: string }): Promise<boolean> {
   try {
     const documents = await db
@@ -322,7 +332,17 @@ export async function getGeneratedContentByDocumentId({ documentId }: { document
       .where(eq(generatedContent.documentId, documentId))
       .orderBy(desc(generatedContent.createdAt));
   } catch (error) {
-    console.error("Failed to get generated content by document from database");
+    console.error("Failed to get generated content by document id from database");
+    throw error;
+  }
+}
+
+export async function deleteGeneratedContentByDocumentId({ documentId }: { documentId: string }) {
+  try {
+    await db.delete(generatedContent).where(eq(generatedContent.documentId, documentId));
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete generated content by document id from database");
     throw error;
   }
 }

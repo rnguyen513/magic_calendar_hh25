@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { google } from "@ai-sdk/google";
 import { streamObject } from "ai";
-import { getDocumentById, createGeneratedContent } from "@/db/queries";
+import { getDocumentById, createGeneratedContent, getGeneratedContentByDocumentId } from "@/db/queries";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/(auth)/auth";
 
@@ -131,11 +131,18 @@ export async function POST(req: NextRequest) {
           // Save generated content if this was a request from a document
           if (documentId) {
             try {
-              await createGeneratedContent({
-                contentType: 'summary',
-                content: object,
-                documentId,
-              });
+              // Check if a summary already exists for this document
+              const existingContent = await getGeneratedContentByDocumentId({ documentId });
+              const existingSummaries = existingContent.filter(item => item.contentType === 'summary');
+              
+              // Only save if there's no existing summary or save is forced
+              if (existingSummaries.length === 0) {
+                await createGeneratedContent({
+                  contentType: 'summary',
+                  content: object,
+                  documentId,
+                });
+              }
             } catch (error) {
               console.error("Error saving generated content:", error);
               // Continue even if saving fails
