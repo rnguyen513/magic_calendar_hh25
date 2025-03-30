@@ -1,4 +1,6 @@
-# MyCally - Your All-in-One Study Companion
+# [MyCally.Tech](https://www.mycally.tech) - Your All-in-One Study Companion
+
+
 
 ### ‼️ IMPORTANT
 Cally currently uses a hardcoded Canvas API key that's tied to a demo account. Canvas only allows AUTHORIZED and VETTED 3rd party apps to integrate with OAuth2, which would allow a user to "sign in with Canvas". We aren't an official partner of Canvas, so that's impossible at this stage. Nevertheless, all other features such as quiz/summary generation and syllabus (or other documents) upload is still functional. We hope you see the vision!
@@ -7,7 +9,7 @@ Cally currently uses a hardcoded Canvas API key that's tied to a demo account. C
 College students juggle assignments, extracurriculars, and personal responsibilities, often feeling overwhelmed. We envisioned an application that simplifies academic life by combining learning, studying, and productivity tracking—all in one place.  
 
 ## 🚀 What It Does  
-MyCally seamlessly integrates with Canvas, allowing students to sync their courses and assignments. The app automatically extracts course data and generates a personalized calendar with due dates.  
+[MyCally](https://www.mycally.tech) seamlessly integrates with Canvas, allowing students to sync their courses and assignments. The app automatically extracts course data and generates a personalized calendar with due dates.  
 
 ### Key Features:  
 ✅ **Smart Calendar** – Organizes assignments and deadlines for better time management.  
