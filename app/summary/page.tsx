@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { experimental_useObject } from "ai/react";
-import { questionsSchema } from "@/lib/schemas";
 import { z } from "zod";
 import { toast } from "sonner";
-import { FileUp, Plus, Loader2 } from "lucide-react";
+import { FileUp, Plus, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/quizzes_components/ui/button";
 import {
   Card,
@@ -13,39 +12,44 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
+  CardFooter,
 } from "@/components/quizzes_components/ui/card";
 import { Progress } from "@/components/quizzes_components/ui/progress";
-import Quiz from "@/components/quizzes_components/quiz";
-import { generateQuizTitle } from "./actions";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function QuizPage() {
-  const router = useRouter();
+// Define summary schema
+const summarySchema = z.object({
+  summaryText: z.string(),
+  keyPoints: z.array(z.string()),
+  title: z.string(),
+});
+
+type Summary = z.infer<typeof summarySchema>;
+
+export default function SummaryPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const documentId = searchParams.get("documentId");
   
   const [files, setFiles] = useState<File[]>([]);
-  const [questions, setQuestions] = useState<z.infer<typeof questionsSchema>>(
-    [],
-  );
+  const [summary, setSummary] = useState<Summary | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [title, setTitle] = useState<string>();
   const [attemptedGeneration, setAttemptedGeneration] = useState(false);
   const [generationError, setGenerationError] = useState(false);
   const [documentFolderId, setDocumentFolderId] = useState<string | null>(null);
 
   const {
     submit,
-    object: partialQuestions,
+    object: partialSummary,
     isLoading,
   } = experimental_useObject({
-    api: documentId ? `/api/quizzes?documentId=${documentId}` : "/api/quizzes",
-    schema: questionsSchema,
+    api: documentId ? `/api/summary?documentId=${documentId}` : "/api/summary",
+    schema: summarySchema,
     initialValue: undefined,
     onError: (error) => {
-      console.error("Quiz generation error:", error);
-      toast.error("Failed to generate quiz. Please try again with another document.");
+      console.error("Summary generation error:", error);
+      toast.error("Failed to generate summary. Please try again with another document.");
       setFiles([]);
       setGenerationError(true);
       
@@ -55,50 +59,43 @@ export default function QuizPage() {
         if (documentFolderId) {
           router.replace(`/study-material/folder/${documentFolderId}`);
         } else {
-          router.replace("/quizzes");
+          router.replace("/summary");
         }
       }
     },
     onFinish: ({ object }) => {
-      setQuestions(object ?? []);
+      setSummary(object ?? null);
     },
   });
 
-  // Effect to auto-trigger quiz generation if documentId is provided
+  // Effect to auto-trigger summary generation if documentId is provided
   useEffect(() => {
     if (documentId && !attemptedGeneration && !generationError) {
       // Mark that we've attempted generation with this document ID
       setAttemptedGeneration(true);
       
-      // If we have a documentId, directly call the quiz API with documentId in the body
+      // If we have a documentId, directly call the summary API with documentId in the body
       submit({ documentId });
       
-      // Try to set a title based on the document ID and get folder information
+      // Try to fetch document info and get folder information
       const fetchDocumentInfo = async () => {
         try {
           const response = await fetch(`/api/documents/${documentId}`);
           if (response.ok) {
             const data = await response.json();
-            if (data.document) {
-              if (data.document.fileName) {
-                const generatedTitle = await generateQuizTitle(data.document.fileName);
-                setTitle(generatedTitle);
-              }
-              
+            if (data.document && data.document.folderId) {
               // Store the folderId if the document has one
-              if (data.document.folderId) {
-                setDocumentFolderId(data.document.folderId);
-              }
+              setDocumentFolderId(data.document.folderId);
             }
           } else {
-            // If we can't fetch the document, redirect back to quizzes page
+            // If we can't fetch the document, redirect back to summary page
             toast.error("Could not find document. Please try again.");
-            router.replace("/quizzes");
+            router.replace("/summary");
           }
         } catch (error) {
           console.error("Error fetching document info:", error);
           toast.error("Error retrieving document details.");
-          router.replace("/quizzes");
+          router.replace("/summary");
         }
       };
       
@@ -147,6 +144,12 @@ export default function QuizPage() {
 
   const handleSubmitWithFiles = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    if (files.length === 0) {
+      toast.error("Please upload a PDF file first");
+      return;
+    }
+    
     const encodedFiles = await Promise.all(
       files.map(async (file) => ({
         name: file.name,
@@ -154,29 +157,54 @@ export default function QuizPage() {
         data: await encodeFileAsBase64(file),
       })),
     );
-    submit({ files: encodedFiles });
     
-    if (encodedFiles.length > 0) {
-      const generatedTitle = await generateQuizTitle(encodedFiles[0].name);
-      setTitle(generatedTitle);
-    }
+    submit({ files: encodedFiles });
   };
 
   const clearPDF = () => {
     setFiles([]);
-    setQuestions([]);
+    setSummary(null);
     
     // If we know which folder this document came from, redirect back to it
     if (documentFolderId) {
       router.push(`/study-material/folder/${documentFolderId}`);
+    } else {
+      router.push('/summary');
     }
   };
 
-  const progress = partialQuestions ? (partialQuestions.length / 4) * 100 : 0;
-
-  if (questions.length === 4) {
+  // If we have a summary, render it
+  if (summary) {
     return (
-      <Quiz title={title ?? "Quiz"} questions={questions} clearPDF={clearPDF} />
+      <div className="pt-16 container mx-auto max-w-4xl">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">{summary.title}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="prose dark:prose-invert">
+              <h3 className="text-lg font-semibold">Summary</h3>
+              <p className="whitespace-pre-line">{summary.summaryText}</p>
+              
+              <h3 className="text-lg font-semibold mt-6">Key Points</h3>
+              <ul>
+                {summary.keyPoints.map((point, index) => (
+                  <li key={index}>{point}</li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="flex justify-center pt-4">
+              <Button
+                onClick={clearPDF}
+                className="bg-primary hover:bg-primary/90 w-full max-w-md"
+              >
+                <BookOpen className="mr-2 h-4 w-4" /> Try Another PDF
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
@@ -187,23 +215,15 @@ export default function QuizPage() {
         <Card className="w-full max-w-md border p-8">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl font-bold">
-              Generating Quiz
+              Generating Summary
             </CardTitle>
             <CardDescription>
-              Creating questions based on your document...
+              Creating a detailed summary of your document...
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">
-                  Generating questions...
-                </span>
-                <span className="text-sm font-medium">
-                  {partialQuestions?.length || 0}/4
-                </span>
-              </div>
-              <Progress value={progress} />
+              <Progress value={partialSummary ? 50 : 0} />
             </div>
           </CardContent>
         </Card>
@@ -252,15 +272,15 @@ export default function QuizPage() {
             </div>
             <Plus className="h-4 w-4" />
             <div className="rounded-full bg-primary/10 p-2">
-              <Loader2 className="h-6 w-6" />
+              <BookOpen className="h-6 w-6" />
             </div>
           </div>
           <div className="space-y-2">
             <CardTitle className="text-2xl font-bold">
-              PDF Quiz Generator
+              PDF Summary Generator
             </CardTitle>
             <CardDescription className="text-base">
-              Upload a PDF to generate an interactive quiz based on its content using Google&apos;s Gemini Pro.
+              Upload a PDF to create a comprehensive summary based on its content using Google&apos;s Gemini Pro.
             </CardDescription>
           </div>
         </CardHeader>
@@ -294,28 +314,25 @@ export default function QuizPage() {
               {isLoading ? (
                 <span className="flex items-center space-x-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  <span>Generating Quiz...</span>
+                  <span>Generating Summary...</span>
                 </span>
               ) : (
-                "Generate Quiz"
+                "Generate Summary"
               )}
             </Button>
           </form>
-          {isLoading && partialQuestions && (
+          {isLoading && (
             <div className="mt-6 space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">
-                  Generating questions...
-                </span>
-                <span className="text-sm font-medium">
-                  {partialQuestions?.length || 0}/4
+                  Creating summary...
                 </span>
               </div>
-              <Progress value={progress} />
+              <Progress value={partialSummary ? 50 : 0} />
             </div>
           )}
         </CardContent>
       </Card>
     </div>
   );
-}
+} 

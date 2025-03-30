@@ -59,3 +59,8 @@ pnpm dev
 ```
 
 Your app template should now be running on [localhost:3000](http://localhost:3000/).
+
+
+If you're comfortable using elevated privileges, you can run the command with sudo:
+sudo npm i -g vercel
+to get started 

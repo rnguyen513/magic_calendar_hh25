@@ -64,7 +64,7 @@ export async function callGeminiAPI(prompt: string): Promise<{ id: number, prior
   }
 
   try {
-    console.log("Calling Gemini API for assignment prioritization...");
+    // console.log("Calling Gemini API for assignment prioritization...");
     
     // Initialize the Gemini API client
     const genAI = new GoogleGenerativeAI(apiKey);
@@ -74,7 +74,7 @@ export async function callGeminiAPI(prompt: string): Promise<{ id: number, prior
     try {
       model = genAI.getGenerativeModel({ model: "gemini-2.0-pro" });
     } catch (e) {
-      console.log("Failed to use gemini-2.0-pro, falling back to gemini-1.5-flash");
+      // console.log("Failed to use gemini-2.0-pro, falling back to gemini-1.5-flash");
       model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     }
     
@@ -110,7 +110,7 @@ export async function callGeminiAPI(prompt: string): Promise<{ id: number, prior
       return parsedResponse;
     } catch (parseError) {
       console.error("Failed to parse Gemini API response:", parseError);
-      console.log("Raw response:", text);
+      // console.log("Raw response:", text);
       return null;
     }
   } catch (error) {
@@ -162,11 +162,11 @@ export function fallbackPrioritization(assignments: ProcessedAssignment[]): { id
  */
 export async function getPrioritizedAssignments(assignments: ProcessedAssignment[]): Promise<PrioritizedAssignment[]> {
   if (assignments.length === 0) {
-    console.log("No assignments to prioritize");
+    // console.log("No assignments to prioritize");
     return [];
   }
   
-  console.log(`Prioritizing ${assignments.length} assignments...`);
+  // console.log(`Prioritizing ${assignments.length} assignments...`);
   
   // Build prompt and call Gemini API
   const prompt = buildPrioritizationPrompt(assignments);

@@ -1,21 +1,37 @@
 "use server";
 
-import { google } from "@ai-sdk/google";
-import { generateObject } from "ai";
-import { z } from "zod";
-
+// Instead of using the Google API which requires a valid API key,
+// create a simple function that generates a title based on the filename
 export const generateQuizTitle = async (file: string) => {
-  const result = await generateObject({
-    model: google("gemini-1.5-flash-latest"),
-    schema: z.object({
-      title: z
-        .string()
-        .describe(
-          "A max three word title for the quiz based on the file provided as context",
-        ),
-    }),
-    prompt:
-      "Generate a title for a quiz based on the following (PDF) file name. Try and extract as much info from the file name as possible. If the file name is just numbers or incoherent, just return quiz.\n\n " + file,
-  });
-  return result.object.title;
+  try {
+    // Extract title from filename (remove extension)
+    const baseName = file.split('.').slice(0, -1).join('.');
+    
+    // Clean up the title
+    let title = baseName
+      .replace(/[_-]/g, ' ')  // Replace underscores and hyphens with spaces
+      .replace(/\s+/g, ' ')   // Replace multiple spaces with a single space
+      .trim();
+      
+    // Capitalize first letter of each word
+    title = title.split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+      
+    // If the title is empty or too long, provide a default
+    if (!title || title.length < 2) {
+      return "Quiz";
+    }
+    
+    // Limit to 3 words if there are more
+    const words = title.split(' ');
+    if (words.length > 3) {
+      title = words.slice(0, 3).join(' ');
+    }
+    
+    return title;
+  } catch (error) {
+    console.error("Error generating title:", error);
+    return "Quiz";
+  }
 }; 

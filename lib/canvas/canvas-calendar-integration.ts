@@ -76,18 +76,18 @@ export async function fetchAndProcessCanvasAssignments(): Promise<{
     const assignments = await getAllUpcomingAssignments();
     
     if (assignments.length === 0) {
-      console.log("No upcoming assignments found in Canvas");
+      // console.log("No upcoming assignments found in Canvas");
       return { events: [], rawAssignments: [] };
     }
     
     // console.log(`Found ${assignments.length} upcoming assignments in Canvas`);
     
     // Step 2: Use Gemini to prioritize assignments
-    console.log("Sending assignments to Gemini for prioritization...");
+    // console.log("Sending assignments to Gemini for prioritization...");
     const prioritizedAssignments = await getPrioritizedAssignments(assignments);
     
     // Step 3: Convert to calendar events
-    console.log("Converting prioritized assignments to calendar events...");
+    // console.log("Converting prioritized assignments to calendar events...");
     const events = assignmentsToCalendarEvents(prioritizedAssignments);
     
     // console.log(`Created ${events.length} calendar events from Canvas assignments`);

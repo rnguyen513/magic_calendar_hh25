@@ -15,9 +15,17 @@ export async function GET(req: NextRequest) {
     }
 
     const userId = session.user.id;
-    const folders = await getFoldersByUserId({ userId });
-
-    return NextResponse.json({ folders });
+    try {
+      const folders = await getFoldersByUserId({ userId });
+      return NextResponse.json({ folders });
+    } catch (dbError: any) {
+      console.error("Failed to get folders by user from database", dbError);
+      // If table doesn't exist yet, return empty array instead of error
+      if (dbError.message && dbError.message.includes('relation "Folder" does not exist')) {
+        return NextResponse.json({ folders: [] });
+      }
+      throw dbError;
+    }
   } catch (error) {
     console.error("Error fetching folders:", error);
     return NextResponse.json(
@@ -49,9 +57,20 @@ export async function POST(req: NextRequest) {
     }
 
     const userId = session.user.id;
-    const newFolder = await createFolder({ folderName, userId });
-
-    return NextResponse.json({ folder: newFolder }, { status: 201 });
+    try {
+      const newFolder = await createFolder({ folderName, userId });
+      return NextResponse.json({ folder: newFolder }, { status: 201 });
+    } catch (dbError: any) {
+      console.error("Failed to create folder in database", dbError);
+      // If table doesn't exist yet, return a helpful error
+      if (dbError.message && dbError.message.includes('relation "Folder" does not exist')) {
+        return NextResponse.json(
+          { error: "Database not initialized. Please run migrations first." },
+          { status: 500 }
+        );
+      }
+      throw dbError;
+    }
   } catch (error) {
     console.error("Error creating folder:", error);
     return NextResponse.json(
