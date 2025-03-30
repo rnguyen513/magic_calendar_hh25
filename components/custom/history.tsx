@@ -95,7 +95,7 @@ export const History = ({ user }: { user: User | undefined }) => {
         }}
       >
         {/* <MenuIcon /> */}
-        AI Chats
+        ai chats
       </Button>
 
       <Sheet

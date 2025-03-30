@@ -26,6 +26,8 @@ import {
 import { Input } from "@/components/quizzes_components/ui/input";
 import { Label } from "@/components/quizzes_components/ui/label";
 
+import { auth } from "@/app/(auth)/auth"
+
 // Define folder type
 type Folder = {
   id: string;
@@ -43,6 +45,21 @@ export default function StudyMaterialPage() {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const dialogCloseRef = useRef<HTMLButtonElement>(null);
+
+    // Async check for session and redirection
+    // useEffect(() => {
+    //     const checkSession = async () => {
+    //       const session = await auth();
+    //       if (!session || !session.user) {
+    //         router.push("/"); // Redirect to home page if not signed in
+    //       } else {
+    //         // Set loading state to false once session is verified
+    //         setIsLoading(false);
+    //       }
+    //     };
+    
+    //     checkSession();
+    //   }, [router]);
 
   // Fetch folders on component mount
   useEffect(() => {

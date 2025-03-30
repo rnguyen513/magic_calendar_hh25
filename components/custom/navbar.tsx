@@ -26,12 +26,12 @@ export const Navbar = async () => {
           <SlashIcon size={18}/>
           <Link href="/">
             <span className="text-sm font-medium dark:text-gray-300 truncate w-32 md:w-auto">
-                My Magic Calendar
+                mycally
             </span>
           </Link>
         </div>
         <History user={session?.user} />
-        <NavLink href="/study-material" label="Study Material"/>
+        <NavLink href="/study-material" label="study material"/>
       </div>
 
       {/* Right Side: Navigation & User Menu */}
