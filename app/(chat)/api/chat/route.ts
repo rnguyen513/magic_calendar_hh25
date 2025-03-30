@@ -19,6 +19,7 @@ import {
 import { generateUUID } from "@/lib/utils";
 
 export async function POST(request: Request) {
+    console.log("Request: " + request)
   const { id, messages }: { id: string; messages: Array<Message> } =
     await request.json();
 

@@ -18,17 +18,17 @@ export function CalendarLoader() {
       if (loaded) return; // Don't load multiple times
       
       try {
-        console.log("Loading Canvas assignments into calendar...");
+        // console.log("Loading Canvas assignments into calendar...");
         
         // Fetch and process Canvas assignments
         const { events } = await fetchAndProcessCanvasAssignments();
         
         if (events.length === 0) {
-          console.log("No Canvas assignments to add to calendar");
+        //   console.log("No Canvas assignments to add to calendar");
           return;
         }
         
-        console.log(`Adding ${events.length} Canvas assignments to calendar`);
+        // console.log(`Adding ${events.length} Canvas assignments to calendar`);
         
         // Add each event to the calendar
         events.forEach(event => {

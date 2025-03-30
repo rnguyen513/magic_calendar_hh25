@@ -50,7 +50,7 @@ export async function fetchCanvasAssignments(): Promise<CanvasAssignmentBasic[]>
   try {
 
     const courses = await canvasGET<CanvasCourse[]>("/courses?enrollment_state=active&per_page=50");
-    console.log("Fetched Canvas courses:", courses.length);
+    // console.log("Fetched Canvas courses:", courses.length);
 
     // Parallel fetch for all assignments
     // promise all calls to fetch for all this data all at the same time instead of one by one 
@@ -61,7 +61,7 @@ export async function fetchCanvasAssignments(): Promise<CanvasAssignmentBasic[]>
         // get assignments for each course 
         const assignments = await canvasGET<CanvasAssignment[]>(`/courses/${course.id}/assignments?per_page=100`);
         // record all assignments 
-        console.log(`Fetched ${assignments.length} assignments for course: ${course.name}`);
+        // console.log(`Fetched ${assignments.length} assignments for course: ${course.name}`);
 
         // filter what we want from the assignments 
         return assignments
@@ -79,7 +79,7 @@ export async function fetchCanvasAssignments(): Promise<CanvasAssignmentBasic[]>
     );
     // instead of multiple instead of assignments have them one into short 
     const flattened = allAssignments.flat();
-    console.log(`Total assignments fetched: ${flattened.length}`);
+    // console.log(`Total assignments fetched: ${flattened.length}`);
     return flattened;
   } catch (err: any) {
     console.error("Failed to fetch Canvas assignments:", err.message);
@@ -93,7 +93,7 @@ export async function fetchCanvasAssignments(): Promise<CanvasAssignmentBasic[]>
     const assignmentsDue = await fetchCanvasAssignments();
     // stringify so we can return in json 
     const jsonInfo = JSON.stringify(assignmentsDue, null, 2);
-    console.log(jsonInfo);
+    // console.log(jsonInfo);
   } catch (err: any) {
     console.error("Failed to fetch:", err.message);
   }

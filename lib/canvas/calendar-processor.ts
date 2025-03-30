@@ -4,9 +4,9 @@ import { API_BASE, fetchCanvasAssignments, CanvasAssignmentBasic } from '../../c
 const ACCESS_TOKEN = process.env.CANVAS_ACCESS_TOKEN || "";
 
 // Log important initialization values to help debug
-console.log('Canvas Processor Initialized');
-console.log('API_BASE:', API_BASE);
-console.log('ACCESS_TOKEN present:', ACCESS_TOKEN ? 'Yes (length: ' + ACCESS_TOKEN.length + ')' : 'No');
+// console.log('Canvas Processor Initialized');
+// console.log('API_BASE:', API_BASE);
+// console.log('ACCESS_TOKEN present:', ACCESS_TOKEN ? 'Yes (length: ' + ACCESS_TOKEN.length + ')' : 'No');
 
 // Define types for Canvas data
 export interface CanvasCourse {
@@ -53,13 +53,13 @@ interface CanvasAssignmentResponse {
 
 // Fetch wrapper with auth - now used as a backup only
 async function canvasGET<T>(endpoint: string): Promise<T> {
-  console.log('Fetching Canvas endpoint:', endpoint);
+//   console.log('Fetching Canvas endpoint:', endpoint);
 
   // Check if we're running on client-side
   const isClient = typeof window !== 'undefined';
   
   if (isClient) {
-    console.log('Running on client-side, using API route proxy');
+    // console.log('Running on client-side, using API route proxy');
     // On client side, we need to use the API route to proxy the request
     try {
       const response = await fetch(`/api/canvas${endpoint}`);
@@ -74,7 +74,7 @@ async function canvasGET<T>(endpoint: string): Promise<T> {
     }
   } else {
     // Server-side fetch with direct Canvas API access
-    console.log('Running on server-side, directly fetching Canvas API');
+    // console.log('Running on server-side, directly fetching Canvas API');
     try {
       const res = await fetch(`${API_BASE}${endpoint}`, {
         headers: {
@@ -115,13 +115,13 @@ export function calculateDaysUntilDue(dueDate: string | null): number | null {
  * Get active courses from Canvas
  */
 export async function getActiveCourses(): Promise<CanvasCourse[]> {
-  console.log('Getting active courses');
+//   console.log('Getting active courses');
   try {
     const courses = await canvasGET<CanvasCourse[]>("/courses?enrollment_state=active&per_page=50");
-    console.log(`Found ${courses.length} active courses`);
+    // console.log(`Found ${courses.length} active courses`);
     return courses;
   } catch (error) {
-    console.error('Error getting active courses:', error);
+    // console.error('Error getting active courses:', error);
     throw error;
   }
 }
@@ -133,10 +133,10 @@ export async function getCourseAssignments(courseId: number): Promise<CanvasAssi
 //   console.log(`Getting assignments for course ID: ${courseId}`);
   try {
     const assignments = await canvasGET<CanvasAssignment[]>(`/courses/${courseId}/assignments?per_page=100`);
-    console.log(`Found ${assignments.length} assignments for course ID: ${courseId}`);
+    // console.log(`Found ${assignments.length} assignments for course ID: ${courseId}`);
     return assignments;
   } catch (error) {
-    console.error(`Error getting assignments for course ${courseId}:`, error);
+    // console.error(`Error getting assignments for course ${courseId}:`, error);
     throw error;
   }
 }
@@ -146,7 +146,7 @@ export async function getCourseAssignments(courseId: number): Promise<CanvasAssi
  * This is the main function that should be used by other modules
  */
 export async function getAllUpcomingAssignments(): Promise<ProcessedAssignment[]> {
-  console.log('Getting all upcoming assignments...');
+//   console.log('Getting all upcoming assignments...');
   
   // Check if we're running on client-side
   const isClient = typeof window !== 'undefined';
@@ -155,7 +155,7 @@ export async function getAllUpcomingAssignments(): Promise<ProcessedAssignment[]
     let canvasAssignments: CanvasAssignmentResponse[];
     
     if (isClient) {
-      console.log('Fetching assignments via API route...');
+    //   console.log('Fetching assignments via API route...');
       // On client side, use the API route directly
       const response = await fetch('/api/canvas/assignments');
       
@@ -165,7 +165,7 @@ export async function getAllUpcomingAssignments(): Promise<ProcessedAssignment[]
       
       canvasAssignments = await response.json();
     } else {
-      console.log('Fetching assignments via server-side code...');
+    //   console.log('Fetching assignments via server-side code...');
       // On server side, use the existing function
       canvasAssignments = await fetchCanvasAssignments();
     }
@@ -198,7 +198,7 @@ export async function getAllUpcomingAssignments(): Promise<ProcessedAssignment[]
       return new Date(a.due_at).getTime() - new Date(b.due_at).getTime();
     });
     
-    console.log(`Returning ${sortedAssignments.length} processed assignments`);
+    // console.log(`Returning ${sortedAssignments.length} processed assignments`);
     return sortedAssignments;
     
   } catch (err: any) {
