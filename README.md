@@ -1,5 +1,6 @@
 # [MyCally.Tech](https://www.mycally.tech) - Your All-in-One Study Companion
 
+<img width="1489" alt="image" src="https://github.com/user-attachments/assets/86636806-b78d-4bbc-90be-276987bc920c" />
 
 
 ### ‼️ IMPORTANT
