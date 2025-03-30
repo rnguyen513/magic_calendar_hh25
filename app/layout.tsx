@@ -8,7 +8,7 @@ import { Navbar } from "@/components/custom/navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mina Scheduler with Canvas Integration",
+  title: "MyCally",
   description: "An AI-powered scheduling app with Canvas integration",
 };
 

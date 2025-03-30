@@ -163,7 +163,7 @@ export default function DailyView({
   const hoursColumnRef = useRef<HTMLDivElement>(null);
   const [detailedHour, setDetailedHour] = useState<string | null>(null);
   const [timelinePosition, setTimelinePosition] = useState<number>(0);
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [currentDate, setCurrentDate] = useState<Date>(new Date(2025, 3, 1));
   const [direction, setDirection] = useState<number>(0);
   const { setOpen } = useModal();
   const { getters, handlers } = useScheduler();
