@@ -70,6 +70,8 @@ export default function SummaryPage() {
 
   // Effect to auto-trigger summary generation if documentId is provided
   useEffect(() => {
+    let isActive = true; // Flag to track if component is still mounted
+    
     if (documentId && !attemptedGeneration && !generationError) {
       // Mark that we've attempted generation with this document ID
       setAttemptedGeneration(true);
@@ -80,27 +82,44 @@ export default function SummaryPage() {
       // Try to fetch document info and get folder information
       const fetchDocumentInfo = async () => {
         try {
+          if (!isActive) return; // Don't proceed if component unmounted
+          
           const response = await fetch(`/api/documents/${documentId}`);
+          if (!isActive) return; // Don't proceed if component unmounted
+          
           if (response.ok) {
             const data = await response.json();
+            if (!isActive) return; // Don't proceed if component unmounted
+            
+            console.log("Document data received:", data); // Log for debugging
+            
             if (data.document && data.document.folderId) {
-              // Store the folderId if the document has one
+              console.log("Setting folder ID from document:", data.document.folderId);
               setDocumentFolderId(data.document.folderId);
             }
           } else {
             // If we can't fetch the document, redirect back to summary page
-            toast.error("Could not find document. Please try again.");
-            router.replace("/summary");
+            if (isActive) {
+              toast.error("Could not find document. Please try again.");
+              router.replace("/summary");
+            }
           }
         } catch (error) {
-          console.error("Error fetching document info:", error);
-          toast.error("Error retrieving document details.");
-          router.replace("/summary");
+          if (isActive) {
+            console.error("Error fetching document info:", error);
+            toast.error("Error retrieving document details.");
+            router.replace("/summary");
+          }
         }
       };
       
       fetchDocumentInfo();
     }
+    
+    // Cleanup function
+    return () => {
+      isActive = false; // Prevent state updates if component unmounts
+    };
   }, [documentId, submit, attemptedGeneration, generationError, router]);
 
   // Reset attempt tracking when documentId changes
@@ -108,6 +127,30 @@ export default function SummaryPage() {
     if (!documentId) {
       setAttemptedGeneration(false);
       setGenerationError(false);
+    }
+  }, [documentId]);
+
+  // When component mounts, check if we have a document ID in the URL and try to fetch folder info
+  useEffect(() => {
+    if (documentId) {
+      // Try to fetch document info to get folder ID even before generation
+      const fetchInitialFolderInfo = async () => {
+        try {
+          const response = await fetch(`/api/documents/${documentId}`);
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Initial document folder check:", data);
+            if (data.document && data.document.folderId) {
+              console.log("Setting initial folder ID:", data.document.folderId);
+              setDocumentFolderId(data.document.folderId);
+            }
+          }
+        } catch (error) {
+          console.error("Error in initial folder info fetch:", error);
+        }
+      };
+      
+      fetchInitialFolderInfo();
     }
   }, [documentId]);
 
@@ -169,7 +212,8 @@ export default function SummaryPage() {
     if (documentFolderId) {
       router.push(`/study-material/folder/${documentFolderId}`);
     } else {
-      router.push('/summary');
+      // If we don't have a folder ID, go to the study material page
+      router.push('/study-material');
     }
   };
 
